@@ -5,8 +5,8 @@ def getBoss():
 
 class Boss:
     def __init__(self):
-        self.health = random.randint(30, 40)
-        self.damage = random.randint(10, 20)
+        self.health = random.randint(15, 30)
+        self.damage = random.randint(5, 15)
 
     def isAlive(self):
         return self.health > 0

@@ -20,7 +20,8 @@ items = [
     Item("Water Bottle", "Healing/Weapon", 1, 5, 0),
     Item("Map", "Info", 0, 0, 0),
     Item("Key Map", "Info", 0, 0, 0),
-    Item("Gate Map", "Info", 0, 0, 0)
+    Item("Gate Map", "Info", 0, 0, 0),
+    Item("Flower Pot", "Extra", 0, 0, 0)
 ]
 
 def getRandomItem():

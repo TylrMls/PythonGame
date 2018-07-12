@@ -1,4 +1,5 @@
 import item as items
+import random
 
 class Player(object):
     def __init__(self, name):
@@ -50,3 +51,16 @@ class Player(object):
         for i in items.items:
             if i.name == item:
                 return i.uses
+
+    def destroyItem(self):
+        itemToRemove = random.choice(self.inventory)
+        print("The enemy hit you and destroyed your {}!".format(itemToRemove.name))
+        if itemToRemove.name == "Flower Pot":
+            newItem = random.choice(items.items)
+            self.inventory.append(newItem)
+            print("You found {} in the Flower Pot!".format(newItem.name))
+        for i in range(len(self.inventory)):
+            item = self.inventory[i]
+            if item.name == itemToRemove.name:
+                self.inventory.pop(i)
+                return

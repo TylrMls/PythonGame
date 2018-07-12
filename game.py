@@ -99,7 +99,7 @@ def bossBattle():
     print("As you open the gates, you see a heavily armoured enemy emerge from them...")
     time.sleep(3)
     while bossFight.isAlive() and user.isAlive():
-        print("You have {} health!".format(user.health))
+        print("You have {} health! Enemy has {} health!".format(user.health, bossFight.health))
         command = input("FIGHT MODE > ")
         if command == "punch":
             commandRun = True
@@ -142,6 +142,8 @@ def bossBattle():
                     print("You don't have a {}!".format(item))
         if bossFight.health > 0 and commandRun:
             user.health -= bossFight.damage
+            if random.randint(1, 3) == 1:
+                user.destroyItem()
             commandRun = False
 
 running = True
@@ -199,7 +201,7 @@ while running and user.isAlive():
     elif command.lower() == "fight":
         random.seed(datetime.now())
         while tile.enemy.isAlive() and user.isAlive():
-            print("You have {} health!".format(user.health))
+            print("You have {} health! Enemy has {} health!".format(user.health, tile.enemy.health))
             commandRun = False
             command = input("FIGHT MODE > ")
             if command.lower() == "punch":
