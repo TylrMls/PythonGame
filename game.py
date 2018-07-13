@@ -308,11 +308,8 @@ while running and user.isAlive():
         else:
             _, item = command.split(" ", 1)
             if user.hasItem(item):
-                print("Works!")
                 if items.getType(item) == "Utility":
-                    print("Works1!")
                     if items.getName(item) == "Teleporter":
-                        print("Works2!")
                         print("Are you sure you want to use this? This is a one use item and cannot be rediscovered")
                         isSure = input("YES/NO > ").lower()
                         if isSure == "yes":
