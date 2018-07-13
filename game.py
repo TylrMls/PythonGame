@@ -349,5 +349,9 @@ while running and user.isAlive():
 os.system('cls')
 if user.isAlive():
     print("You did it! You have won!")
+    print("")
+    input("Press enter to end game")
 else:
     print("Game Over!")
+    print("")
+    input("Press enter to end game")
