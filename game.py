@@ -1,4 +1,4 @@
-import location, player, random, enemy, time, os, boss
+import location, player, random, time, os, boss
 import item as items
 from datetime import datetime
 
@@ -27,6 +27,8 @@ y = 0
 tiles = {}
 searched_tiles = []
 
+hasTele = False
+
 # print("{}, {}".format(gateFindx, gateFindy))
 # For debug perposes
 
@@ -48,49 +50,10 @@ def move(direction):
         newtile = location.Location(seed + key)
         if x == gateFindx and y == gateFindy:
             newtile.name = "The Gate"
+        if x == gateMapx and y == gateMapy:
+            newtile.name = "The Platform"
         tiles[key] = newtile
         return newtile
-
-def debugMode(tile):
-    global x, y, debugOn
-    print("You have entered debug mode!")
-    debugOn = True
-    while debugOn:
-        print("Location: {}, on grid location {}, {}".format(tile.name, x, y))
-        cmd = input("$ > ")
-        if cmd.lower() == "changex":
-            amountChange = input("New x: ")
-            x = int(amountChange)
-            tile = move("debug")
-        elif cmd.lower() == "changey":
-            amountChange = input("New y: ")
-            y = int(amountChange)
-            tile = move("debug")
-        elif cmd.lower() == "exit":
-            debugOn = False
-        elif cmd.lower().startswith("additem"):
-            _, item1 = cmd.split(" ", 1)
-            if items.doesExist(item1):
-                user.addItem(items.addItem(item1))
-                print("Added item: {}".format(item1))
-            else:
-                print("That item does not exist!")
-        elif cmd.lower().startswith("addspecialitem"):
-            _, item2 = cmd.split(" ", 1)
-            if items.doesSpecialExist(item2):
-                user.addSpecialItem(items.getSpecialItem(item2))
-                print("Added item: {}".format(item2))
-            else:
-                print("That item does not exist!")
-        elif cmd.lower() == "keylocation":
-            print("Key Location: {}, {}".format(keyFindx, keyFindy))
-        elif cmd.lower() == "gatelocation":
-            print("Gate Location: {}, {}".format(gateFindx, gateFindy))
-        elif cmd.lower() == "sethealth":
-            setHealth = input("New health: ")
-            user.health = int(setHealth)
-        else:
-            print("That is not a command")
 
 def bossBattle():
     commandRun = False
@@ -145,11 +108,66 @@ def bossBattle():
             if random.randint(1, 3) == 1:
                 user.destroyItem()
             commandRun = False
+        else:
+            global running
+            running = False
+
+def debugMode(tile):
+    global x, y, debugOn
+    print("You have entered debug mode!")
+    debugOn = True
+    while debugOn:
+        print("Location: {}, on grid location {}, {}".format(tile.name, x, y))
+        cmd = input("$ > ")
+        if cmd.lower() == "changex":
+            amountChange = input("New x: ")
+            x = int(amountChange)
+            tile = move("debug")
+        elif cmd.lower() == "changey":
+            amountChange = input("New y: ")
+            y = int(amountChange)
+            tile = move("debug")
+        elif cmd.lower() == "exit":
+            debugOn = False
+        elif cmd.lower().startswith("additem"):
+            _, item1 = cmd.split(" ", 1)
+            if items.doesExist(item1):
+                user.addItem(items.addItem(item1))
+                print("Added item: {}".format(item1))
+            else:
+                print("That item does not exist!")
+        elif cmd.lower().startswith("addspecialitem"):
+            _, item2 = cmd.split(" ", 1)
+            if items.doesSpecialExist(item2):
+                user.addItem(items.getSpecialItem(item2))
+                print("Added item: {}".format(item2))
+            else:
+                print("That item does not exist!")
+        elif cmd.lower().startswith("addpergameitem"):
+            _, item3 = cmd.split(" ", 1)
+            if items.doesPerGameExist(item3):
+                user.addItem(items.getPerGameItem(item3))
+                print("Added item: {}".format(item3))
+            else:
+                print("That item does not exist!")
+        elif cmd.lower() == "keylocation":
+            print("Key Location: {}, {}".format(keyFindx, keyFindy))
+        elif cmd.lower() == "gatelocation":
+            print("Gate Location: {}, {}".format(gateFindx, gateFindy))
+        elif cmd.lower() == "sethealth":
+            setHealth = input("New health: ")
+            user.health = int(setHealth)
+        elif cmd.lower() == "instaboss":
+            bossBattle()
+        else:
+            print("That is not a command")
 
 running = True
 while running and user.isAlive():
     if tile.name == "The Gate":
         print("You have come across a massive gate, leading to an unknown place")
+    elif tile.name == "The Platform":
+        print("Mysterious Platform")
     else:
         print("You are in {}".format(tile.name))
     if tile.enemy and tile.enemy.isAlive():
@@ -181,6 +199,27 @@ while running and user.isAlive():
                 tile = move("w")
             else:
                 print("Moving Cancelled")
+    elif command.lower().startswith("move"):
+        if tile.enemy and tile.enemy.isAlive():
+            print("You cannot move. There are enemies nearby")
+        elif command.lower() == "move ":
+            print("You must give a direction")
+        else:
+            _, direction = command.split(" ", 1)
+            if direction[0].lower() == "n":
+                print("Go North")
+                tile = move("n")
+            elif direction[0].lower() == "e":
+                print("Go East")
+                tile = move("e")
+            elif direction[0].lower() == "s":
+                print("Go South")
+                tile = move("s")
+            elif direction[0].lower() == "w":
+                print("Go West")
+                tile = move("w")
+            else:
+                print("That's not a direction")
     elif command.lower() == "debug":
         debugMode(tile)
         tile = move("debug")
@@ -252,15 +291,39 @@ while running and user.isAlive():
                     itemRecieved = items.getRandomItem()
                     user.addItem(itemRecieved)
                     print("You killed the enemy and they dropped a {}!".format(itemRecieved.name))
+                    if hasTele == False:
+                        print("They also dropped a strange tablet-like object")
+                        user.addItem(items.addItem("Teleporter"))
+                        hasTele = True
                 else:
                     print("You killed the enemy!")
+    elif command.lower() == "help":
+        print("Command options:")
+        print("items, move, search, fight, use")
     elif command.lower().startswith("use"):
         if command.lower() == "use" or command.lower() == "use ":
             print("You must specify what item to use")
         else:
             _, item = command.split(" ", 1)
             if user.hasItem(item):
-                if items.getType(item) == "Info":
+                print("Works!")
+                if items.getType(item) == "Utility":
+                    print("Works1!")
+                    if items.getName(item) == "Teleporter":
+                        print("Works2!")
+                        print("Are you sure you want to use this? This is a one use item and cannot be rediscovered")
+                        isSure = input("YES/NO > ").lower()
+                        if isSure == "yes":
+                            print("You used the teleporter")
+                            x = gateMapx
+                            y = gateMapy
+                            tile = move("tele")
+                            user.removeItem("Teleporter")
+                        elif isSure == "no":
+                            print("You decided not to use the teleporter")
+                        else:
+                            print("That's not an option")
+                elif items.getType(item) == "Info":
                     if items.getName(item) == "Map":
                         print("You look at your map and determine you are around the coordinates {}, {}".format(x, y))
                     elif items.getName(item) == "Gate Map":
@@ -281,3 +344,8 @@ while running and user.isAlive():
                 print("You don't have {}".format(item))
     elif command == "":
         print("You must give a command")
+os.system('cls')
+if user.isAlive():
+    print("You did it! You have won!")
+else:
+    print("Game Over!")

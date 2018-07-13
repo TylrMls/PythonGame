@@ -13,9 +13,6 @@ class Player(object):
     def addItem(self, item):
         self.inventory.append(item)
 
-    def addSpecialItem(self, item):
-        self.inventory.append(item)
-
     def removeItem(self, name):
         for i in range(len(self.inventory)):
             item = self.inventory[i]
