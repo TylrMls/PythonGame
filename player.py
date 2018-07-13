@@ -1,6 +1,8 @@
 import item as items
 import random
 
+# Confirm commit
+
 class Player(object):
     def __init__(self, name):
         self.name = name

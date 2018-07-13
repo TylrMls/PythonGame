@@ -1,5 +1,7 @@
 import random, enemy
 
+# Confirm commit
+
 descriptions = ["Hollow", "Quiet", "Whistling", "Mesmerizing", "Shrek's"]
 location_types = ["Forest", "River", "Cave", "Fields", "Swamp", "Desert", "Mountain", "Valley", "Tundra"]
 

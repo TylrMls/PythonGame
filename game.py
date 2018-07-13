@@ -2,6 +2,8 @@ import location, player, random, time, os, boss
 import item as items
 from datetime import datetime
 
+# Confirm commit
+
 seed = input("Enter a seed: ")
 
 tile = location.Location(seed + "0,0")

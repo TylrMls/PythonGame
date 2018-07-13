@@ -1,11 +1,13 @@
 import random
 
+# Confirm commit
+
 def get():
     if random.randint(1, 10) == 1:
         return Enemy()
     else:
         return None
-        
+
 def getDebug():
     return Enemy()
 
